@@ -2,10 +2,25 @@ import Link from 'next/link';
 
 export default function Navbar() {
     return (
-        <nav className="flex gap-4 p-4 bg-gray-100">
-            <Link href="/">Home</Link>
-            <Link href="/form">Registration Form</Link>
-            <Link href="/admin">Admin Dashboard</Link>
+        <nav className="flex gap-6 justify-center items-center p-4 mx-auto max-w-4xl bg-white/80 backdrop-blur-sm rounded-xl shadow-md transition-all duration-300 hover:shadow-lg bg-gradient-to-r from-indigo-100 via-purple-50 to-pink-100">
+            <Link
+                href="/"
+                className="text-black font-medium hover:text-indigo-600 transition-colors"
+            >
+                Home
+            </Link>
+            <Link
+                href="/form"
+                className="text-black font-medium hover:text-indigo-600 transition-colors"
+            >
+                Registration Form
+            </Link>
+            <Link
+                href="/admin"
+                className="text-black font-medium hover:text-indigo-600 transition-colors"
+            >
+                Admin Dashboard
+            </Link>
         </nav>
     );
 }

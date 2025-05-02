@@ -185,327 +185,321 @@ const RegistrationForm = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto py-8 px-4 bg-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold text-center mb-8 text-gray-800">Registration Form</h1>
+    <div className="w-full min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-12 px-4">
+      <div className="max-w-4xl mx-auto bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 transition-all duration-300 hover:shadow-2xl">
+        <h1 className="text-4xl font-extrabold text-center mb-10 text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+          Create Your Account
+        </h1>
 
-      <ToastContainer position="top-right" autoClose={5000} />
+        <ToastContainer position="top-right" autoClose={5000} theme="colored" />
 
-      <Formik
-        initialValues={initialValues}
-        validationSchema={validationSchema}
-        onSubmit={handleSubmit}
-      >
-        {({ setFieldValue, errors, touched, values }) => (
-          <Form className="space-y-6">
-            {/* Personal Information Section */}
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Personal Information</h2>
+        <Formik
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          {({ setFieldValue, errors, touched, values }) => (
+            <Form className="space-y-8">
+              {/* Personal Information Section */}
+              <div className="bg-gradient-to-r from-gray-50 to-indigo-50 p-8 rounded-xl shadow-inner">
+                <h2 className="text-2xl font-semibold mb-6 text-indigo-900">Personal Information</h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Full Name */}
-                <div>
-                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700 mb-1">
-                    Full Name*
-                  </label>
-                  <Field
-                    type="text"
-                    id="fullName"
-                    name="fullName"
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.fullName && touched.fullName ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    placeholder="Enter your full name"
-                  />
-                  <ErrorMessage name="fullName" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
-
-                {/* Date of Birth */}
-                <div>
-                  <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-700 mb-1">
-                    Date of Birth*
-                  </label>
-                  <DatePicker
-                    id="dateOfBirth"
-                    selected={values.dateOfBirth}
-                    onChange={(date) => setFieldValue('dateOfBirth', date)}
-                    dateFormat="dd/MM/yyyy"
-                    showYearDropdown
-                    yearDropdownItemNumber={100}
-                    scrollableYearDropdown
-                    maxDate={new Date()}
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.dateOfBirth && touched.dateOfBirth ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    placeholderText="Select date of birth"
-                  />
-                  <ErrorMessage name="dateOfBirth" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
-
-                {/* Gender */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">Gender*</label>
-                  <div className="flex space-x-4">
-                    <label className="inline-flex items-center">
-                      <Field
-                        type="radio"
-                        name="gender"
-                        value="male"
-                        className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="ml-2 text-gray-700">Male</span>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Full Name */}
+                  <div>
+                    <label htmlFor="fullName" className="block text-sm font-medium text-indigo-900 mb-2">
+                      Full Name*
                     </label>
-                    <label className="inline-flex items-center">
-                      <Field
-                        type="radio"
-                        name="gender"
-                        value="female"
-                        className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="ml-2 text-gray-700">Female</span>
-                    </label>
-                    <label className="inline-flex items-center">
-                      <Field
-                        type="radio"
-                        name="gender"
-                        value="other"
-                        className="h-4 w-4 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="ml-2 text-gray-700">Other</span>
-                    </label>
+                    <Field
+                      type="text"
+                      id="fullName"
+                      name="fullName"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.fullName && touched.fullName ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
+                      placeholder="Enter your full name"
+                    />
+                    <ErrorMessage name="fullName" component="div" className="mt-1 text-sm text-red-500" />
                   </div>
-                  <ErrorMessage name="gender" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
 
-                {/* Mobile Number */}
-                <div>
-                  <label htmlFor="mobileNumber" className="block text-sm font-medium text-gray-700 mb-1">
-                    Mobile Number*
-                  </label>
-                  <Field
-                    type="text"
-                    id="mobileNumber"
-                    name="mobileNumber"
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.mobileNumber && touched.mobileNumber ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    placeholder="10-digit mobile number"
-                  />
-                  <ErrorMessage name="mobileNumber" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
-
-                {/* Email */}
-                <div>
-                  <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-                    Email ID*
-                  </label>
-                  <Field
-                    type="email"
-                    id="email"
-                    name="email"
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.email && touched.email ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    placeholder="Enter your email address"
-                  />
-                  <ErrorMessage name="email" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
-
-                {/* Aadhaar Number */}
-                <div>
-                  <label htmlFor="aadhaarNumber" className="block text-sm font-medium text-gray-700 mb-1">
-                    Aadhaar Number*
-                  </label>
-                  <Field
-                    type="text"
-                    id="aadhaarNumber"
-                    name="aadhaarNumber"
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.aadhaarNumber && touched.aadhaarNumber ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    placeholder="12-digit Aadhaar number"
-                  />
-                  <ErrorMessage name="aadhaarNumber" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
-
-                {/* PAN Number */}
-                <div>
-                  <label htmlFor="panNumber" className="block text-sm font-medium text-gray-700 mb-1">
-                    PAN Number*
-                  </label>
-                  <Field
-                    type="text"
-                    id="panNumber"
-                    name="panNumber"
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase ${errors.panNumber && touched.panNumber ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    placeholder="ABCDE1234F"
-                  />
-                  <ErrorMessage name="panNumber" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
-              </div>
-            </div>
-
-            {/* Address Information Section */}
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Address Information</h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* Permanent Address */}
-                <div className="md:col-span-2">
-                  <label htmlFor="permanentAddress" className="block text-sm font-medium text-gray-700 mb-1">
-                    Permanent Address*
-                  </label>
-                  <Field
-                    as="textarea"
-                    id="permanentAddress"
-                    name="permanentAddress"
-                    rows={3}
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.permanentAddress && touched.permanentAddress ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    placeholder="Enter your permanent address"
-                  />
-                  <ErrorMessage name="permanentAddress" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
-
-                {/* State */}
-                <div>
-                  <label htmlFor="state" className="block text-sm font-medium text-gray-700 mb-1">
-                    State*
-                  </label>
-                  <Field
-                    as="select"
-                    id="state"
-                    name="state"
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.state && touched.state ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                  >
-                    <option value="">Select State</option>
-                    {indianStates.map((state) => (
-                      <option key={state} value={state}>
-                        {state}
-                      </option>
-                    ))}
-                  </Field>
-                  <ErrorMessage name="state" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
-
-                {/* City */}
-                <div>
-                  <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-1">
-                    City*
-                  </label>
-                  <Field
-                    type="text"
-                    id="city"
-                    name="city"
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.city && touched.city ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    placeholder="Enter your city"
-                  />
-                  <ErrorMessage name="city" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
-
-                {/* Pincode */}
-                <div>
-                  <label htmlFor="pincode" className="block text-sm font-medium text-gray-700 mb-1">
-                    Pincode*
-                  </label>
-                  <Field
-                    type="text"
-                    id="pincode"
-                    name="pincode"
-                    className={`w-full px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${errors.pincode && touched.pincode ? 'border-red-500' : 'border-gray-300'
-                      }`}
-                    placeholder="6-digit pincode"
-                  />
-                  <ErrorMessage name="pincode" component="div" className="mt-1 text-sm text-red-600" />
-                </div>
-              </div>
-            </div>
-
-            {/* Document Upload Section */}
-            <div className="bg-gray-50 p-6 rounded-lg">
-              <h2 className="text-xl font-semibold mb-4 text-gray-700">Document Upload</h2>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* Photo Upload */}
-                <div>
-                  <label htmlFor="photo" className="block text-sm font-medium text-gray-700 mb-1">
-                    Upload Photo* (JPG/PNG, max 5MB)
-                  </label>
-                  <input
-                    ref={photoInputRef}
-                    type="file"
-                    id="photo"
-                    name="photo"
-                    accept="image/jpeg, image/png"
-                    onChange={(e) => handlePhotoChange(e, setFieldValue)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <ErrorMessage name="photo" component="div" className="mt-1 text-sm text-red-600" />
-
-                  {/* Photo Preview */}
-                  {photoPreview && (
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-600 mb-1">Preview:</p>
-                      <img
-                        src={photoPreview}
-                        alt="Preview"
-                        className="h-40 w-40 object-cover rounded border border-gray-300"
-                      />
-                    </div>
-                  )}
-                </div>
-
-                {/* Video Upload */}
-                <div>
-                  <label htmlFor="video" className="block text-sm font-medium text-gray-700 mb-1">
-                    Upload Verification Video* (MP4/MOV, max 10MB)
-                  </label>
-                  <input
-                    ref={videoInputRef}
-                    type="file"
-                    id="video"
-                    name="video"
-                    accept="video/mp4, video/quicktime"
-                    onChange={(e) => handleVideoChange(e, setFieldValue)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
-                  <ErrorMessage name="video" component="div" className="mt-1 text-sm text-red-600" />
-
-                  {/* Video Preview */}
-                  {videoPreview && (
-                    <div className="mt-2">
-                      <p className="text-sm text-gray-600 mb-1">Preview:</p>
-                      <video
-                        src={videoPreview}
-                        controls
-                        className="h-40 w-full object-cover rounded border border-gray-300"
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-
-            {/* Submit Button */}
-            <div className="flex justify-center">
-              <button
-                type="submit"
-                className="px-6 py-3 bg-blue-600 text-white font-medium rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:bg-gray-400 disabled:cursor-not-allowed"
-                disabled={loading}
-              >
-                {loading ? (
-                  <div className="flex items-center justify-center">
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                    </svg>
-                    Submitting...
+                  {/* Date of Birth */}
+                  <div>
+                    <label htmlFor="dateOfBirth" className="block text-sm font-medium text-indigo-900 mb-2">
+                      Date of Birth*
+                    </label>
+                    <DatePicker
+                      id="dateOfBirth"
+                      selected={values.dateOfBirth}
+                      onChange={(date) => setFieldValue('dateOfBirth', date)}
+                      dateFormat="dd/MM/yyyy"
+                      showYearDropdown
+                      yearDropdownItemNumber={100}
+                      scrollableYearDropdown
+                      maxDate={new Date()}
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.dateOfBirth && touched.dateOfBirth ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
+                      placeholderText="Select date of birth"
+                    />
+                    <ErrorMessage name="dateOfBirth" component="div" className="mt-1 text-sm text-red-500" />
                   </div>
-                ) : (
-                  'Submit Registration'
-                )}
-              </button>
-            </div>
-          </Form>
-        )}
-      </Formik>
+
+                  {/* Gender */}
+                  <div>
+                    <label className="block text-sm font-medium text-indigo-900 mb-2">Gender*</label>
+                    <div className="flex space-x-6">
+                      {['male', 'female', 'other'].map((gender) => (
+                        <label key={gender} className="inline-flex items-center cursor-pointer">
+                          <Field
+                            type="radio"
+                            name="gender"
+                            value={gender}
+                            className="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-indigo-200"
+                          />
+                          <span className="ml-2 text-indigo-900 capitalize">{gender}</span>
+                        </label>
+                      ))}
+                    </div>
+                    <ErrorMessage name="gender" component="div" className="mt-1 text-sm text-red-500" />
+                  </div>
+
+                  {/* Mobile Number */}
+                  <div>
+                    <label htmlFor="mobileNumber" className="block text-sm font-medium text-indigo-900 mb-2">
+                      Mobile Number*
+                    </label>
+                    <Field
+                      type="text"
+                      id="mobileNumber"
+                      name="mobileNumber"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.mobileNumber && touched.mobileNumber ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
+                      placeholder="10-digit mobile number"
+                    />
+                    <ErrorMessage name="mobileNumber" component="div" className="mt-1 text-sm text-red-500" />
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label htmlFor="email" className="block text-sm font-medium text-indigo-900 mb-2">
+                      Email ID*
+                    </label>
+                    <Field
+                      type="email"
+                      id="email"
+                      name="email"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.email && touched.email ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
+                      placeholder="Enter your email address"
+                    />
+                    <ErrorMessage name="email" component="div" className="mt-1 text-sm text-red-500" />
+                  </div>
+
+                  {/* Aadhaar Number */}
+                  <div>
+                    <label htmlFor="aadhaarNumber" className="block text-sm font-medium text-indigo-900 mb-2">
+                      Aadhaar Number*
+                    </label>
+                    <Field
+                      type="text"
+                      id="aadhaarNumber"
+                      name="aadhaarNumber"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.aadhaarNumber && touched.aadhaarNumber ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
+                      placeholder="12-digit Aadhaar number"
+                    />
+                    <ErrorMessage name="aadhaarNumber" component="div" className="mt-1 text-sm text-red-500" />
+                  </div>
+
+                  {/* PAN Number */}
+                  <div>
+                    <label htmlFor="panNumber" className="block text-sm font-medium text-indigo-900 mb-2">
+                      PAN Number*
+                    </label>
+                    <Field
+                      type="text"
+                      id="panNumber"
+                      name="panNumber"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase transition-all duration-200 ${errors.panNumber && touched.panNumber ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
+                      placeholder="ABCDE1234F"
+                    />
+                    <ErrorMessage name="panNumber" component="div" className="mt-1 text-sm text-red-500" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Address Information Section */}
+              <div className="bg-gradient-to-r from-gray-50 to-purple-50 p-8 rounded-xl shadow-inner">
+                <h2 className="text-2xl font-semibold mb-6 text-purple-900">Address Information</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Permanent Address */}
+                  <div className="md:col-span-2">
+                    <label htmlFor="permanentAddress" className="block text-sm font-medium text-purple-900 mb-2">
+                      Permanent Address*
+                    </label>
+                    <Field
+                      as="textarea"
+                      id="permanentAddress"
+                      name="permanentAddress"
+                      rows={4}
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 ${errors.permanentAddress && touched.permanentAddress ? 'border-red-400' : 'border-purple-200 hover:border-purple-400'}`}
+                      placeholder="Enter your permanent address"
+                    />
+                    <ErrorMessage name="permanentAddress" component="div" className="mt-1 text-sm text-red-500" />
+                  </div>
+
+                  {/* State */}
+                  <div>
+                    <label htmlFor="state" className="block text-sm font-medium text-purple-900 mb-2">
+                      State*
+                    </label>
+                    <Field
+                      as="select"
+                      id="state"
+                      name="state"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 ${errors.state && touched.state ? 'border-red-400' : 'border-purple-200 hover:border-purple-400'}`}
+                    >
+                      <option value="">Select State</option>
+                      {indianStates.map((state) => (
+                        <option key={state} value={state}>
+                          {state}
+                        </option>
+                      ))}
+                    </Field>
+                    <ErrorMessage name="state" component="div" className="mt-1 text-sm text-red-500" />
+                  </div>
+
+                  {/* City */}
+                  <div>
+                    <label htmlFor="city" className="block text-sm font-medium text-purple-900 mb-2">
+                      City*
+                    </label>
+                    <Field
+                      type="text"
+                      id="city"
+                      name="city"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 ${errors.city && touched.city ? 'border-red-400' : 'border-purple-200 hover:border-purple-400'}`}
+                      placeholder="Enter your city"
+                    />
+                    <ErrorMessage name="city" component="div" className="mt-1 text-sm text-red-500" />
+                  </div>
+
+                  {/* Pincode */}
+                  <div>
+                    <label htmlFor="pincode" className="block text-sm font-medium text-purple-900 mb-2">
+                      Pincode*
+                    </label>
+                    <Field
+                      type="text"
+                      id="pincode"
+                      name="pincode"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 ${errors.pincode && touched.pincode ? 'border-red-400' : 'border-purple-200 hover:border-purple-400'}`}
+                      placeholder="6-digit pincode"
+                    />
+                    <ErrorMessage name="pincode" component="div" className="mt-1 text-sm text-red-500" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Document Upload Section */}
+              <div className="bg-gradient-to-r from-gray-50 to-pink-50 p-8 rounded-xl shadow-inner">
+                <h2 className="text-2xl font-semibold mb-6 text-pink-900">Document Upload</h2>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {/* Photo Upload */}
+                  <div>
+                    <label htmlFor="photo" className="block text-sm font-medium text-pink-900 mb-2">
+                      Upload Photo* (JPG/PNG, max 5MB)
+                    </label>
+                    <input
+                      ref={photoInputRef}
+                      type="file"
+                      id="photo"
+                      name="photo"
+                      accept="image/jpeg, image/png"
+                      onChange={(e) => handlePhotoChange(e, setFieldValue)}
+                      className="w-full px-4 py-3 bg-white border-2 border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 hover:border-pink-400 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-pink-100 file:text-pink-900 file:cursor-pointer"
+                    />
+                    <ErrorMessage name="photo" component="div" className="mt-1 text-sm text-red-500" />
+
+                    {/* Photo Preview */}
+                    {photoPreview && (
+                      <div className="mt-4">
+                        <p className="text-sm text-pink-900 mb-2">Preview:</p>
+                        <img
+                          src={photoPreview}
+                          alt="Preview"
+                          className="h-48 w-48 object-cover rounded-lg border-2 border-pink-200 shadow-sm"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Video Upload */}
+                  <div>
+                    <label htmlFor="video" className="block text-sm font-medium text-pink-900 mb-2">
+                      Upload Verification Video* (MP4/MOV, max 10MB)
+                    </label>
+                    <input
+                      ref={videoInputRef}
+                      type="file"
+                      id="video"
+                      name="video"
+                      accept="video/mp4, video/quicktime"
+                      onChange={(e) => handleVideoChange(e, setFieldValue)}
+                      className="w-full px-4 py-3 bg-white border-2 border-pink-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 hover:border-pink-400 transition-all duration-200 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-pink-100 file:text-pink-900 file:cursor-pointer"
+                    />
+                    <ErrorMessage name="video" component="div" className="mt-1 text-sm text-red-500" />
+
+                    {/* Video Preview */}
+                    {videoPreview && (
+                      <div className="mt-4">
+                        <p className="text-sm text-pink-900 mb-2">Preview:</p>
+                        <video
+                          src={videoPreview}
+                          controls
+                          className="h-48 w-full object-cover rounded-lg border-2 border-pink-200 shadow-sm"
+                        />
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div className="flex justify-center">
+                <button
+                  type="submit"
+                  className="px-8 py-4 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold rounded-lg shadow-md hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-300 transition-all duration-300 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <div className="flex items-center justify-center">
+                      <svg
+                        className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                        ></path>
+                      </svg>
+                      Submitting...
+                    </div>
+                  ) : (
+                    'Submit Registration'
+                  )}
+                </button>
+              </div>
+            </Form>
+          )}
+        </Formik>
+      </div>
     </div>
   );
 };
