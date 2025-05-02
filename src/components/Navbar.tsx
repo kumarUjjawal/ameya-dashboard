@@ -13,13 +13,13 @@ export default function Navbar() {
                 href="/form"
                 className="text-black font-medium hover:text-indigo-600 transition-colors"
             >
-                Registration Form
+                Register
             </Link>
             <Link
                 href="/admin"
                 className="text-black font-medium hover:text-indigo-600 transition-colors"
             >
-                Admin Dashboard
+                Admin
             </Link>
         </nav>
     );

@@ -14,8 +14,8 @@
 
 @media (prefers-color-scheme: dark) {
   :root {
---background: linear-gradient(to bottom right, #e0e7ff, #e0e7ff, #e0e7ff);
-  --foreground: #000000; /* keep black text */
+  --background: linear-gradient(to bottom right, #e0e7ff, #f8f4ff, #f8f4ff);
+  --foreground: #000000;
   }
 }
 
