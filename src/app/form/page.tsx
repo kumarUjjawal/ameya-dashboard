@@ -11,14 +11,14 @@ import axios from 'axios';
 
 // Define the form values type
 interface RegistrationFormValues {
-  fullName: string;
+  name: string;
   dateOfBirth: Date | null;
   gender: string;
-  mobileNumber: string;
+  mobile: string;
   email: string;
-  aadhaarNumber: string;
-  panNumber: string;
-  permanentAddress: string;
+  aadhaar: string;
+  pan: string;
+  address: string;
   state: string;
   city: string;
   pincode: string;
@@ -45,14 +45,14 @@ const RegistrationForm = () => {
 
   // Initial form values
   const initialValues: RegistrationFormValues = {
-    fullName: '',
+    name: '',
     dateOfBirth: null,
     gender: '',
-    mobileNumber: '',
+    mobile: '',
     email: '',
-    aadhaarNumber: '',
-    panNumber: '',
-    permanentAddress: '',
+    aadhaar: '',
+    pan: '',
+    address: '',
     state: '',
     city: '',
     pincode: '',
@@ -62,7 +62,7 @@ const RegistrationForm = () => {
 
   // Yup validation schema
   const validationSchema = Yup.object({
-    fullName: Yup.string()
+    name: Yup.string()
       .required('Full name is required')
       .min(3, 'Name must be at least 3 characters')
       .max(50, 'Name must be less than 50 characters'),
@@ -72,19 +72,19 @@ const RegistrationForm = () => {
     gender: Yup.string()
       .required('Gender is required')
       .oneOf(['male', 'female', 'other'], 'Invalid gender selection'),
-    mobileNumber: Yup.string()
+    mobile: Yup.string()
       .required('Mobile number is required')
       .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits'),
     email: Yup.string()
       .required('Email is required')
       .email('Invalid email format'),
-    aadhaarNumber: Yup.string()
+    aadhaar: Yup.string()
       .required('Aadhaar number is required')
       .matches(/^[0-9]{12}$/, 'Aadhaar number must be exactly 12 digits'),
-    panNumber: Yup.string()
+    pan: Yup.string()
       .required('PAN number is required')
       .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Invalid PAN format'),
-    permanentAddress: Yup.string()
+    address: Yup.string()
       .required('Permanent address is required')
       .min(10, 'Address is too short')
       .max(200, 'Address is too long'),
@@ -116,6 +116,7 @@ const RegistrationForm = () => {
     { resetForm }: FormikHelpers<RegistrationFormValues>
   ) => {
     try {
+      console.log(values)
       setLoading(true);
 
       // Create FormData for file uploads
@@ -207,17 +208,17 @@ const RegistrationForm = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Full Name */}
                   <div>
-                    <label htmlFor="fullName" className="block text-sm font-medium text-indigo-900 mb-2">
+                    <label htmlFor="name" className="block text-sm font-medium text-indigo-900 mb-2">
                       Full Name*
                     </label>
                     <Field
                       type="text"
-                      id="fullName"
-                      name="fullName"
-                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.fullName && touched.fullName ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
+                      id="name"
+                      name="name"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.name && touched.name ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
                       placeholder="Enter your full name"
                     />
-                    <ErrorMessage name="fullName" component="div" className="mt-1 text-sm text-red-500" />
+                    <ErrorMessage name="name" component="div" className="mt-1 text-sm text-red-500" />
                   </div>
 
                   {/* Date of Birth */}
@@ -261,17 +262,17 @@ const RegistrationForm = () => {
 
                   {/* Mobile Number */}
                   <div>
-                    <label htmlFor="mobileNumber" className="block text-sm font-medium text-indigo-900 mb-2">
+                    <label htmlFor="mobile" className="block text-sm font-medium text-indigo-900 mb-2">
                       Mobile Number*
                     </label>
                     <Field
                       type="text"
-                      id="mobileNumber"
-                      name="mobileNumber"
-                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.mobileNumber && touched.mobileNumber ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
+                      id="mobile"
+                      name="mobile"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.mobile && touched.mobile ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
                       placeholder="10-digit mobile number"
                     />
-                    <ErrorMessage name="mobileNumber" component="div" className="mt-1 text-sm text-red-500" />
+                    <ErrorMessage name="mobile" component="div" className="mt-1 text-sm text-red-500" />
                   </div>
 
                   {/* Email */}
@@ -291,32 +292,32 @@ const RegistrationForm = () => {
 
                   {/* Aadhaar Number */}
                   <div>
-                    <label htmlFor="aadhaarNumber" className="block text-sm font-medium text-indigo-900 mb-2">
+                    <label htmlFor="aadhaar" className="block text-sm font-medium text-indigo-900 mb-2">
                       Aadhaar Number*
                     </label>
                     <Field
                       type="text"
-                      id="aadhaarNumber"
-                      name="aadhaarNumber"
-                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.aadhaarNumber && touched.aadhaarNumber ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
+                      id="aadhaar"
+                      name="aadhaar"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all duration-200 ${errors.aadhaar && touched.aadhaar ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
                       placeholder="12-digit Aadhaar number"
                     />
-                    <ErrorMessage name="aadhaarNumber" component="div" className="mt-1 text-sm text-red-500" />
+                    <ErrorMessage name="aadhaar" component="div" className="mt-1 text-sm text-red-500" />
                   </div>
 
                   {/* PAN Number */}
                   <div>
-                    <label htmlFor="panNumber" className="block text-sm font-medium text-indigo-900 mb-2">
+                    <label htmlFor="pan" className="block text-sm font-medium text-indigo-900 mb-2">
                       PAN Number*
                     </label>
                     <Field
                       type="text"
-                      id="panNumber"
-                      name="panNumber"
-                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase transition-all duration-200 ${errors.panNumber && touched.panNumber ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
+                      id="pan"
+                      name="pan"
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 uppercase transition-all duration-200 ${errors.pan && touched.pan ? 'border-red-400' : 'border-indigo-200 hover:border-indigo-400'}`}
                       placeholder="ABCDE1234F"
                     />
-                    <ErrorMessage name="panNumber" component="div" className="mt-1 text-sm text-red-500" />
+                    <ErrorMessage name="pan" component="div" className="mt-1 text-sm text-red-500" />
                   </div>
                 </div>
               </div>
@@ -328,18 +329,18 @@ const RegistrationForm = () => {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {/* Permanent Address */}
                   <div className="md:col-span-2">
-                    <label htmlFor="permanentAddress" className="block text-sm font-medium text-purple-900 mb-2">
+                    <label htmlFor="address" className="block text-sm font-medium text-purple-900 mb-2">
                       Permanent Address*
                     </label>
                     <Field
                       as="textarea"
-                      id="permanentAddress"
-                      name="permanentAddress"
+                      id="address"
+                      name="address"
                       rows={4}
-                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 ${errors.permanentAddress && touched.permanentAddress ? 'border-red-400' : 'border-purple-200 hover:border-purple-400'}`}
+                      className={`w-full px-4 py-3 bg-white border-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 transition-all duration-200 ${errors.address && touched.address ? 'border-red-400' : 'border-purple-200 hover:border-purple-400'}`}
                       placeholder="Enter your permanent address"
                     />
-                    <ErrorMessage name="permanentAddress" component="div" className="mt-1 text-sm text-red-500" />
+                    <ErrorMessage name="address" component="div" className="mt-1 text-sm text-red-500" />
                   </div>
 
                   {/* State */}

@@ -19,6 +19,10 @@ model Registration {
   name      String
   mobile    String
   aadhaar   String
+  email     String?
+  pan       String?
+  address   String?
+  pincode   String?
   state     String
   city      String
   gender    String

@@ -1,4 +1,3 @@
-// pages/api/register.ts
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { prisma } from '@/lib/prisma';
 import formidable from 'formidable';
@@ -54,6 +53,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 name: getFieldValue(fields.name),
                 mobile: getFieldValue(fields.mobile),
                 aadhaar: getFieldValue(fields.aadhaar),
+                email: getFieldValue(fields.email),
+                address: getFieldValue(fields.address),
+                pincode: getFieldValue(fields.pincode),
+                pan: getFieldValue(fields.pan),
                 state: getFieldValue(fields.state),
                 city: getFieldValue(fields.city),
                 gender: getFieldValue(fields.gender),
