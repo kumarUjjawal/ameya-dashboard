@@ -1,37 +1,53 @@
-import { prisma } from "@/lib/prisma";
-import { NextResponse } from "next/server";
-import formidable from "formidable";
-import fs from "fs";
-import { join } from "path";
+// pages/api/register.ts
+import type { NextApiRequest, NextApiResponse } from 'next';
+import { prisma } from '@/lib/prisma';
+import formidable from 'formidable';
 
 export const config = {
     api: {
-        bodyParser: false,
+        bodyParser: false, // important to let formidable handle the multipart/form-data
     },
 };
 
+// helper to get a string value from field
 const getFieldValue = (value: string | string[] | undefined): string =>
-    Array.isArray(value) ? value[0] : value ?? "";
+    Array.isArray(value) ? value[0] : value ?? '';
 
-// Helper to parse FormData
-async function parseFormData(req: Request) {
+// helper to parse form using formidable
+function parseForm(req: NextApiRequest) {
     return new Promise<{ fields: formidable.Fields; files: formidable.Files }>((resolve, reject) => {
-        const form = formidable({ multiples: false, uploadDir: "./public/uploads", keepExtensions: true });
+        const form = formidable({
+            multiples: false,
+            uploadDir: './public/uploads',
+            keepExtensions: true,
+        });
 
-        form.parse(req as any, (err, fields, files) => {
+        form.parse(req, (err, fields, files) => {
             if (err) reject(err);
             else resolve({ fields, files });
         });
     });
 }
 
-export async function POST(req: Request) {
-    try {
-        const { fields, files } = await parseFormData(req);
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    if (req.method !== 'POST') {
+        res.status(405).json({ success: false, error: 'Method not allowed' });
+        return;
+    }
 
-        // Optional: move files if needed
-        const imageUrl = files.photo ? "/uploads/" + files.photo[0].newFilename : null;
-        const videoUrl = files.video ? "/uploads/" + files.video[0].newFilename : null;
+    try {
+        const { fields, files } = await parseForm(req);
+
+        const imageFile = files.photo as formidable.File | formidable.File[] | undefined;
+        const videoFile = files.video as formidable.File | formidable.File[] | undefined;
+
+        const imageUrl = imageFile
+            ? '/uploads/' + (Array.isArray(imageFile) ? imageFile[0].newFilename : imageFile.newFilename)
+            : null;
+
+        const videoUrl = videoFile
+            ? '/uploads/' + (Array.isArray(videoFile) ? videoFile[0].newFilename : videoFile.newFilename)
+            : null;
 
         const registration = await prisma.registration.create({
             data: {
@@ -48,13 +64,13 @@ export async function POST(req: Request) {
                 videoUrl,
             },
         });
-        return NextResponse.json({ success: true, registration }, { status: 201 });
+
+        res.status(201).json({ success: true, registration });
     } catch (error) {
-        console.error(error);
-        return NextResponse.json({ success: false, error: "Failed to register" }, { status: 500 });
+        console.error('Error in /api/register:', error);
+        res.status(500).json({ success: false, error: 'Failed to register' });
     }
 }
-
 export async function GET(req: Request) {
     const { searchParams } = new URL(req.url);
 
