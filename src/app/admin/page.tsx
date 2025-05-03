@@ -1,8 +1,33 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
+  const [registrations, setRegistrations] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch registrations from your API
+    const fetchData = async () => {
+      try {
+        const res = await fetch("/api/dashboard");
+        const data = await res.json();
+        if (data.success) {
+          setRegistrations(data.data);
+        } else {
+          console.error("Failed to fetch registrations:", data.error);
+        }
+      } catch (err) {
+        console.error("Error fetching registrations:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <main className="w-full min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex">
       {/* Sidebar */}
@@ -28,6 +53,7 @@ export default function AdminDashboard() {
             Registrations
           </h1>
           <div className="flex gap-2">
+            {/* Search and filters (can be wired later) */}
             <input
               type="text"
               placeholder="Search by name, mobile, Aadhaar"
@@ -68,31 +94,41 @@ export default function AdminDashboard() {
               </tr>
             </thead>
             <tbody>
-              {/* Example row */}
-              <tr className="hover:bg-gray-50">
-                <td className="p-4">John Doe</td>
-                <td className="p-4">9876543210</td>
-                <td className="p-4">1234-5678-9012</td>
-                <td className="p-4">State A</td>
-                <td className="p-4">City X</td>
-                <td className="p-4">Male</td>
-                <td className="p-4">
-                  <button className="text-indigo-600 hover:underline" onClick={() => alert("Show image preview modal")}>
-                    Preview
-                  </button>
-                </td>
-                <td className="p-4">
-                  <button className="text-indigo-600 hover:underline" onClick={() => alert("Show video preview modal")}>
-                    Preview
-                  </button>
-                </td>
-              </tr>
-              {/* Add more rows dynamically */}
+              {loading ? (
+                <tr>
+                  <td colSpan={8} className="p-4 text-center">Loading...</td>
+                </tr>
+              ) : registrations.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="p-4 text-center">No registrations found.</td>
+                </tr>
+              ) : (
+                registrations.map((reg) => (
+                  <tr key={reg.id} className="hover:bg-gray-50">
+                    <td className="p-4">{reg.name}</td>
+                    <td className="p-4">{reg.mobile}</td>
+                    <td className="p-4">{reg.aadhaar}</td>
+                    <td className="p-4">{reg.state}</td>
+                    <td className="p-4">{reg.city}</td>
+                    <td className="p-4">{reg.gender}</td>
+                    <td className="p-4">
+                      <button className="text-indigo-600 hover:underline" onClick={() => alert(`Show image for ${reg.name}`)}>
+                        Preview
+                      </button>
+                    </td>
+                    <td className="p-4">
+                      <button className="text-indigo-600 hover:underline" onClick={() => alert(`Show video for ${reg.name}`)}>
+                        Preview
+                      </button>
+                    </td>
+                  </tr>
+                ))
+              )}
             </tbody>
           </table>
         </div>
 
-        {/* Pagination */}
+        {/* Pagination (can be wired later using API pagination fields) */}
         <div className="flex justify-end mt-6 gap-2">
           <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">Previous</button>
           <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">Next</button>

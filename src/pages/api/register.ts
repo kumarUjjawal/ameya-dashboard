@@ -4,7 +4,7 @@ import formidable from 'formidable';
 
 export const config = {
     api: {
-        bodyParser: false, // important to let formidable handle the multipart/form-data
+        bodyParser: false,
     },
 };
 
@@ -74,36 +74,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         res.status(500).json({ success: false, error: 'Failed to register' });
     }
 }
-export async function GET(req: Request) {
-    const { searchParams } = new URL(req.url);
 
-    const search = searchParams.get("search") ?? "";
-    const state = searchParams.get("state");
-    const city = searchParams.get("city");
-    const gender = searchParams.get("gender");
-    const page = parseInt(searchParams.get("page") ?? "1");
-    const pageSize = 10;
-
-    const where: any = {
-        OR: [
-            { name: { contains: search, mode: "insensitive" } },
-            { mobile: { contains: search } },
-            { aadhaar: { contains: search } },
-        ],
-    };
-
-    if (state) where.state = state;
-    if (city) where.city = city;
-    if (gender) where.gender = gender;
-
-    const registrations = await prisma.registration.findMany({
-        where,
-        skip: (page - 1) * pageSize,
-        take: pageSize,
-        orderBy: { createdAt: "desc" },
-    });
-
-    const totalCount = await prisma.registration.count({ where });
-
-    return NextResponse.json({ registrations, totalCount });
-}
