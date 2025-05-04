@@ -1,6 +1,5 @@
 "use client";
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useState } from "react";
 
 export default function AdminDashboard() {
@@ -55,64 +54,6 @@ export default function AdminDashboard() {
       alert('Delete failed: ' + data.error);
     }
   };
-  // useEffect(() => {
-  //   // Fetch registrations from your API
-  //   const fetchData = async () => {
-  //     try {
-  //       const res = await fetch("/api/dashboard");
-  //       const data = await res.json();
-  //       if (data.success) {
-  //         setRegistrations(data.data);
-  //         console.log("API response:", data);
-  //       } else {
-  //         console.error("Failed to fetch registrations:", data.error);
-  //       }
-  //     } catch (err) {
-  //       console.error("Error fetching registrations:", err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //
-  //   fetchData();
-  // }, []);
-  //
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     setLoading(true);
-  //     try {
-  //       const params = new URLSearchParams();
-  //       if (search) params.append("search", search);
-  //       if (stateFilter) params.append("state", stateFilter);
-  //       if (cityFilter) params.append("city", cityFilter);
-  //       if (genderFilter) params.append("gender", genderFilter);
-  //
-  //       const res = await fetch(`/api/dashboard?${params.toString()}`);
-  //       const data = await res.json();
-  //       setRegistrations(data.data);
-  //     } catch (error) {
-  //       console.error("Error fetching data:", error);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-  //
-  //   fetchData();
-  // }, [search, stateFilter, cityFilter, genderFilter]);
-  //
-  //
-  // const handleDelete = async (id: number) => {
-  //   if (!confirm('Are you sure?')) return;
-  //   const res = await fetch(`/api/dashboard?id=${id}`, { method: 'DELETE' });
-  //   const data = await res.json();
-  //   if (data.success) {
-  //     alert('Deleted!');
-  //     fetchData(); // refresh your table data
-  //   } else {
-  //     alert('Delete failed: ' + data.error);
-  //   }
-  // };
-
   return (
     <main className="w-full min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex">
       <section className="flex-1 p-8 overflow-auto">
@@ -157,11 +98,14 @@ export default function AdminDashboard() {
               <option value="Female">Female</option>
               <option value="Other">Other</option>
             </select>
+            <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">
+              <Link href="/form">Add New</Link>
+            </button>
           </div>
         </header>
 
         {/* Table */}
-        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-hidden">
+        <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl overflow-x-auto">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-gradient-to-r from-indigo-500 to-purple-500 text-white">
@@ -214,9 +158,15 @@ export default function AdminDashboard() {
                         Preview
                       </button>
                     </td>
-                    <td className="p-4">
+                    <td className="p-4 whitespace-nowrap">
+                      <Link
+                        href={`/form?id=${reg.id}`}
+                        className="text-blue-600 hover:underline mr-4"
+                      >
+                        Edit
+                      </Link>
                       <button
-                        className="text-red-600 hover:underline ml-4"
+                        className="text-red-600 hover:underline"
                         onClick={() => handleDelete(reg.id)}
                       >
                         Delete
