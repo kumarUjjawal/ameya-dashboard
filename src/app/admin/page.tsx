@@ -10,6 +10,7 @@ export default function AdminDashboard() {
   const [stateFilter, setStateFilter] = useState("");
   const [cityFilter, setCityFilter] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
+  const [editingId, setEditingId] = useState<number | null>(null);
 
   const fetchData = async () => {
     setLoading(true);
