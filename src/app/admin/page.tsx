@@ -14,7 +14,21 @@ export default function AdminDashboard() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState<null | boolean>(null);
+  const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
 
+  const handleImagePreview = (imageUrl: string) => {
+    setSelectedImage(imageUrl);
+  };
+
+  const handleVideoPreview = (videoUrl: string) => {
+    setSelectedVideo(videoUrl);
+  };
+
+  const handleClosePreview = () => {
+    setSelectedImage(null);
+    setSelectedVideo(null);
+  };
   const fetchData = async () => {
     setLoading(true);
     try {
@@ -50,7 +64,7 @@ export default function AdminDashboard() {
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (username === "admin" && password === "supersecret123") {
+    if (username === "admin" && password === "123456") {
       localStorage.setItem("auth", "true");
       setIsAuthenticated(true);
     } else {
@@ -67,7 +81,7 @@ export default function AdminDashboard() {
     return (
       <main className="w-full min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex items-center justify-center">
         <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm">
-          <h1 className="text-3xl font-extrabold text-center mb-6 text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+          <h1 className="text-3xl font-extrabold text-center mb-6 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
             Admin Login
           </h1>
           <form onSubmit={handleLogin} className="space-y-4">
@@ -146,7 +160,7 @@ export default function AdminDashboard() {
     <main className="w-full min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex">
       <section className="flex-1 p-8 overflow-auto">
         <header className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-extrabold text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+          <h1 className="text-3xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
             Registrations
           </h1>
           <div className="flex gap-2">
@@ -237,12 +251,18 @@ export default function AdminDashboard() {
                     <td className="p-4">{reg.city}</td>
                     <td className="p-4">{reg.pincode}</td>
                     <td className="p-4">
-                      <button className="text-indigo-600 hover:underline" onClick={() => alert(`Show image for ${reg.name}`)}>
+                      <button
+                        className="text-indigo-600 hover:underline"
+                        onClick={() => handleImagePreview(reg.imageUrl)}
+                      >
                         Preview
                       </button>
                     </td>
                     <td className="p-4">
-                      <button className="text-indigo-600 hover:underline" onClick={() => alert(`Show video for ${reg.name}`)}>
+                      <button
+                        className="text-indigo-600 hover:underline"
+                        onClick={() => handleVideoPreview(reg.videoUrl)}
+                      >
                         Preview
                       </button>
                     </td>
@@ -267,6 +287,38 @@ export default function AdminDashboard() {
           </table>
         </div>
 
+        {/* Image Preview Modal */}
+        {selectedImage && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg max-w-lg w-full">
+              <button
+                onClick={handleClosePreview}
+                className="absolute top-2 right-2 text-3xl text-red-500"
+              >
+                &times;
+              </button>
+              <img src={selectedImage} alt="Preview" className="w-full" />
+            </div>
+          </div>
+        )}
+
+        {/* Video Preview Modal */}
+        {selectedVideo && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div className="bg-white p-6 rounded-lg max-w-lg w-full">
+              <button
+                onClick={handleClosePreview}
+                className="absolute top-2 right-2 text-xl text-red-500"
+              >
+                &times;
+              </button>
+              <video controls className="w-full">
+                <source src={selectedVideo} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
+          </div>
+        )}
         {/* Pagination (can be wired later using API pagination fields) */}
         <div className="flex justify-end mt-6 gap-2">
           <button className="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">Previous</button>
