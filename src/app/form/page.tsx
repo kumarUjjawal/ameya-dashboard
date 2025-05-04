@@ -1,6 +1,6 @@
 'use client';
-
-import { useState, useRef } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { useEffect, useState, useRef } from 'react';
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import DatePicker from 'react-datepicker';
@@ -30,7 +30,8 @@ const RegistrationForm = () => {
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-
+  const searchParams = useSearchParams();
+  const id = searchParams && searchParams.get('id');
   const photoInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
 
@@ -59,6 +60,40 @@ const RegistrationForm = () => {
     photo: null,
     video: null
   };
+  const [initialFormValues, setInitialFormValues] = useState<RegistrationFormValues>(initialValues);
+
+  useEffect(() => {
+    if (id) {
+      fetch(`/api/dashboard?id=${id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success && data.registration) {
+            const reg = data.registration;
+            setInitialFormValues({
+              name: reg.name || '',
+              dateOfBirth: reg.dateOfBirth ? new Date(reg.dateOfBirth) : null,
+              gender: reg.gender || '',
+              mobile: reg.mobile || '',
+              email: reg.email || '',
+              aadhaar: reg.aadhaar || '',
+              pan: reg.pan || '',
+              address: reg.address || '',
+              state: reg.state || '',
+              city: reg.city || '',
+              pincode: reg.pincode || '',
+              photo: null, // can't prepopulate a File object from URL
+              video: null
+            });
+
+            setPhotoPreview(reg.imageUrl || null);
+            setVideoPreview(reg.videoUrl || null);
+          }
+        })
+        .catch(err => {
+          console.error('Failed to fetch registration', err);
+        });
+    }
+  }, [id]);
 
   // Yup validation schema
   const validationSchema = Yup.object({
@@ -135,15 +170,22 @@ const RegistrationForm = () => {
         }
       });
 
-      // Send data to API
-      const response = await axios.post('/api/register', formData, {
+      const id = searchParams?.get('id'); // <-- get id here
+
+      const url = id ? `/api/register?id=${id}` : '/api/register';
+      const method = id ? 'put' : 'post';
+
+      const response = await axios({
+        method,
+        url,
+        data: formData,
         headers: {
           'Content-Type': 'multipart/form-data',
-        }
+        },
       });
 
-      if (response.status === 201) {
-        toast.success('Registration submitted successfully!');
+      if (response.status === 200 || response.status === 201) {
+        toast.success(`Registration ${id ? 'updated' : 'submitted'} successfully!`);
         resetForm();
         setPhotoPreview(null);
         setVideoPreview(null);
@@ -152,7 +194,7 @@ const RegistrationForm = () => {
       }
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error('Registration failed. Please try again.');
+      toast.error(`Registration ${id ? 'update' : 'submission'} failed. Please try again.`);
     } finally {
       setLoading(false);
     }
@@ -195,7 +237,7 @@ const RegistrationForm = () => {
         <ToastContainer position="top-right" autoClose={5000} theme="colored" />
 
         <Formik
-          initialValues={initialValues}
+          initialValues={initialFormValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
         >
