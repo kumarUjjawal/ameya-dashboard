@@ -255,7 +255,7 @@ export default function AdminDashboard() {
                         className="text-indigo-600 hover:underline"
                         onClick={() => handleImagePreview(reg.imageUrl)}
                       >
-                        Preview
+                        View
                       </button>
                     </td>
                     <td className="p-4">
@@ -263,7 +263,7 @@ export default function AdminDashboard() {
                         className="text-indigo-600 hover:underline"
                         onClick={() => handleVideoPreview(reg.videoUrl)}
                       >
-                        Preview
+                        View
                       </button>
                     </td>
                     <td className="p-4 whitespace-nowrap">

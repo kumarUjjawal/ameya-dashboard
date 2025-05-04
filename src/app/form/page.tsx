@@ -8,7 +8,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
-
+import { useRouter } from 'next/navigation';
 // Define the form values type
 interface RegistrationFormValues {
   name: string;
@@ -27,6 +27,8 @@ interface RegistrationFormValues {
 }
 
 const RegistrationForm = () => {
+
+  const router = useRouter();
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -186,11 +188,14 @@ const RegistrationForm = () => {
 
       if (response.status === 200 || response.status === 201) {
         toast.success(`Registration ${id ? 'updated' : 'submitted'} successfully!`);
+        window.scrollTo({ top: 0, behavior: "smooth" });
         resetForm();
         setPhotoPreview(null);
         setVideoPreview(null);
         if (photoInputRef.current) photoInputRef.current.value = '';
         if (videoInputRef.current) videoInputRef.current.value = '';
+
+        router.push('/success')
       }
     } catch (error) {
       console.error('Error submitting form:', error);
