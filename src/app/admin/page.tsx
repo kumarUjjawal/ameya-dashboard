@@ -10,6 +10,10 @@ export default function AdminDashboard() {
   const [cityFilter, setCityFilter] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
   const [editingId, setEditingId] = useState<number | null>(null);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isAuthenticated, setIsAuthenticated] = useState<null | boolean>(null);
 
   const fetchData = async () => {
     setLoading(true);
@@ -33,15 +37,98 @@ export default function AdminDashboard() {
       setLoading(false);
     }
   };
-
-  // ✅ Use fetchData in both effects
-  useEffect(() => {
-    fetchData();
-  }, []);
-
   useEffect(() => {
     fetchData();
   }, [search, stateFilter, cityFilter, genderFilter]);
+
+  useEffect(() => {
+    const authValue = localStorage.getItem("auth") === "true";
+    setIsAuthenticated(authValue);
+  }, []);
+
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (username === "admin" && password === "supersecret123") {
+      localStorage.setItem("auth", "true");
+      setIsAuthenticated(true);
+    } else {
+      setError("Invalid credentials");
+    }
+  };
+
+  if (isAuthenticated === null) {
+    // still loading, avoid mismatch
+    return null; // or a loading spinner if you like
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <main className="w-full min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex items-center justify-center">
+        <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-sm">
+          <h1 className="text-3xl font-extrabold text-center mb-6 text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+            Admin Login
+          </h1>
+          <form onSubmit={handleLogin} className="space-y-4">
+            <input
+              type="text"
+              placeholder="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+            />
+            {error && <p className="text-sm text-red-500">{error}</p>}
+            <button
+              type="submit"
+              className="w-full py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-semibold hover:opacity-90 transition"
+            >
+              Login
+            </button>
+          </form>
+        </div>
+      </main>
+    );
+  }
+
+  // const fetchData = async () => {
+  //   setLoading(true);
+  //   try {
+  //     const params = new URLSearchParams();
+  //     if (search) params.append("search", search);
+  //     if (stateFilter) params.append("state", stateFilter);
+  //     if (cityFilter) params.append("city", cityFilter);
+  //     if (genderFilter) params.append("gender", genderFilter);
+  //
+  //     const res = await fetch(`/api/dashboard?${params.toString()}`);
+  //     const data = await res.json();
+  //     if (data.success) {
+  //       setRegistrations(data.data);
+  //     } else {
+  //       console.error("Failed to fetch registrations:", data.error);
+  //     }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
+  //
+  // // ✅ Use fetchData in both effects
+  // useEffect(() => {
+  //   fetchData();
+  // }, []);
+  //
+  // useEffect(() => {
+  //   fetchData();
+  // }, [search, stateFilter, cityFilter, genderFilter]);
 
   const handleDelete = async (id: number) => {
     if (!confirm('Are you sure?')) return;
@@ -54,6 +141,7 @@ export default function AdminDashboard() {
       alert('Delete failed: ' + data.error);
     }
   };
+
   return (
     <main className="w-full min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 flex">
       <section className="flex-1 p-8 overflow-auto">
@@ -128,11 +216,11 @@ export default function AdminDashboard() {
             <tbody>
               {loading ? (
                 <tr>
-                  <td colSpan={8} className="p-4 text-center">Loading...</td>
+                  <td colSpan={14} className="p-4 text-center">Loading...</td>
                 </tr>
               ) : registrations.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="p-4 text-center">No registrations found.</td>
+                  <td colSpan={14} className="p-4 text-center">No registrations found.</td>
                 </tr>
               ) : (
                 registrations.map((reg) => (
