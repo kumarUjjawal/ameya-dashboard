@@ -2,29 +2,15 @@
 import { useSearchParams } from 'next/navigation';
 import { useEffect, useState, useRef } from 'react';
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
-import * as Yup from 'yup';
 import DatePicker from 'react-datepicker';
+import { validationSchema } from '../../components/ValidationSchema';
 import "react-datepicker/dist/react-datepicker.css";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-// Define the form values type
-interface RegistrationFormValues {
-  name: string;
-  dateOfBirth: Date | null;
-  gender: string;
-  mobile: string;
-  email: string;
-  aadhaar: string;
-  pan: string;
-  address: string;
-  state: string;
-  city: string;
-  pincode: string;
-  photo: File | null;
-  video: File | null;
-}
+import { RegistrationFormValues } from '../../components/types';
+import { indianStates } from '../../components/Constants';
 
 const RegistrationForm = () => {
 
@@ -33,18 +19,14 @@ const RegistrationForm = () => {
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const searchParams = useSearchParams();
-  const id = searchParams && searchParams.get('id');
   const photoInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
+  const [id, setId] = useState<string | null>(null);
 
-  // List of Indian states for the dropdown
-  const indianStates = [
-    'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat',
-    'Haryana', 'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh',
-    'Maharashtra', 'Manipur', 'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab',
-    'Rajasthan', 'Sikkim', 'Tamil Nadu', 'Telangana', 'Tripura', 'Uttar Pradesh',
-    'Uttarakhand', 'West Bengal', 'Delhi', 'Jammu and Kashmir', 'Ladakh', 'Puducherry'
-  ];
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setId(params.get('id'));
+  }, []);
 
   // Initial form values
   const initialValues: RegistrationFormValues = {
@@ -96,56 +78,6 @@ const RegistrationForm = () => {
         });
     }
   }, [id]);
-
-  // Yup validation schema
-  const validationSchema = Yup.object({
-    name: Yup.string()
-      .required('Full name is required')
-      .min(3, 'Name must be at least 3 characters')
-      .max(50, 'Name must be less than 50 characters'),
-    dateOfBirth: Yup.date()
-      .required('Date of birth is required')
-      .max(new Date(), 'Date of birth cannot be in the future'),
-    gender: Yup.string()
-      .required('Gender is required')
-      .oneOf(['Male', 'Female', 'Other'], 'Invalid gender selection'),
-    mobile: Yup.string()
-      .required('Mobile number is required')
-      .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits'),
-    email: Yup.string()
-      .required('Email is required')
-      .email('Invalid email format'),
-    aadhaar: Yup.string()
-      .required('Aadhaar number is required')
-      .matches(/^[0-9]{12}$/, 'Aadhaar number must be exactly 12 digits'),
-    pan: Yup.string()
-      .required('PAN number is required')
-      .matches(/^[A-Z]{5}[0-9]{4}[A-Z]{1}$/, 'Invalid PAN format'),
-    address: Yup.string()
-      .required('Permanent address is required')
-      .min(10, 'Address is too short')
-      .max(200, 'Address is too long'),
-    state: Yup.string()
-      .required('State is required'),
-    city: Yup.string()
-      .required('City is required')
-      .min(2, 'City name is too short'),
-    pincode: Yup.string()
-      .required('Pincode is required')
-      .matches(/^[0-9]{6}$/, 'Pincode must be exactly 6 digits'),
-    photo: Yup.mixed()
-      .required('Photo is required')
-      .test('fileType', 'Only JPG/PNG files are allowed',
-        (value) => value && ['image/jpeg', 'image/png'].includes((value as File).type))
-      .test('fileSize', 'File must be less than 5MB',
-        (value) => value && (value as File).size <= 5 * 1024 * 1024),
-    video: Yup.mixed()
-      .required('Verification video is required')
-      .test('fileType', 'Only MP4/MOV files are allowed',
-        (value) => value && ['video/mp4', 'video/quicktime'].includes((value as File).type))
-      .test('fileSize', 'File must be less than 10MB',
-        (value) => value && (value as File).size <= 10 * 1024 * 1024)
-  });
 
   // Handle form submission
   const handleSubmit = async (
@@ -235,7 +167,7 @@ const RegistrationForm = () => {
   return (
     <div className="w-full min-h-screen bg-gradient-to-br from-indigo-100 via-purple-50 to-pink-100 py-12 px-4">
       <div className="max-w-4xl mx-auto bg-white/90 backdrop-blur-sm rounded-2xl shadow-xl p-8 transition-all duration-300 hover:shadow-2xl">
-        <h1 className="text-4xl font-extrabold text-center mb-10 text-gray-900 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+        <h1 className="text-4xl font-extrabold text-center mb-10 bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
           Create Your Account
         </h1>
 

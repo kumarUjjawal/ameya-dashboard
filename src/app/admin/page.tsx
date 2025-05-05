@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 export default function AdminDashboard() {
   const [registrations, setRegistrations] = useState<any[]>([]);
@@ -46,7 +46,7 @@ export default function AdminDashboard() {
     setSelectedImage(null);
     setSelectedVideo(null);
   };
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const params = new URLSearchParams();
@@ -67,11 +67,11 @@ export default function AdminDashboard() {
     } finally {
       setLoading(false);
     }
-  };
-  useEffect(() => {
-    fetchData();
   }, [search, stateFilter, cityFilter, genderFilter]);
 
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
   useEffect(() => {
     const authValue = localStorage.getItem("auth") === "true";
     setIsAuthenticated(authValue);
