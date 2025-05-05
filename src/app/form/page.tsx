@@ -1,6 +1,6 @@
 "use client";
-import { useSearchParams } from 'next/navigation';
-import { useEffect, useState, useRef } from 'react';
+import { useSearchParams, ReadonlyURLSearchParams } from 'next/navigation';
+import { useEffect, useState, useRef, Suspense } from 'react';
 import { Formik, Form, Field, ErrorMessage, FormikHelpers } from 'formik';
 import DatePicker from 'react-datepicker';
 import { validationSchema } from '../../components/ValidationSchema';
@@ -12,21 +12,28 @@ import { useRouter } from 'next/navigation';
 import { RegistrationFormValues } from '../../components/types';
 import { indianStates } from '../../components/Constants';
 
-const RegistrationForm = () => {
+// Create a wrapper component that uses the searchParams
+const RegistrationFormWithSearchParams = () => {
+  const searchParams = useSearchParams();
+  return <RegistrationFormContent searchParams={searchParams} />;
+};
 
+// Main component that doesn't directly use useSearchParams
+const RegistrationFormContent = ({ searchParams }: { searchParams: ReadonlyURLSearchParams | null }) => {
   const router = useRouter();
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [videoPreview, setVideoPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const searchParams = useSearchParams();
   const photoInputRef = useRef<HTMLInputElement>(null);
   const videoInputRef = useRef<HTMLInputElement>(null);
   const [id, setId] = useState<string | null>(null);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    setId(params.get('id'));
-  }, []);
+    if (searchParams) {
+      const idParam = searchParams.get('id');
+      setId(idParam); // idParam is string | null, which matches our state type
+    }
+  }, [searchParams]);
 
   // Initial form values
   const initialValues: RegistrationFormValues = {
@@ -104,8 +111,6 @@ const RegistrationForm = () => {
         }
       });
 
-      const id = searchParams?.get('id'); // <-- get id here
-
       const url = id ? `/api/register?id=${id}` : '/api/register';
       const method = id ? 'put' : 'post';
 
@@ -177,6 +182,7 @@ const RegistrationForm = () => {
           initialValues={initialFormValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
+          enableReinitialize
         >
           {({ setFieldValue, errors, touched, values }) => (
             <Form className="space-y-8">
@@ -481,6 +487,15 @@ const RegistrationForm = () => {
         </Formik>
       </div>
     </div>
+  );
+};
+
+// Main export with Suspense wrapper
+const RegistrationForm = () => {
+  return (
+    <Suspense fallback={<div className="p-12 text-center">Loading form...</div>}>
+      <RegistrationFormWithSearchParams />
+    </Suspense>
   );
 };
 
