@@ -16,10 +16,27 @@ export default function AdminDashboard() {
   const [isAuthenticated, setIsAuthenticated] = useState<null | boolean>(null);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [selectedVideo, setSelectedVideo] = useState<string | null>(null);
+  const [selectedState, setSelectedState] = useState('');
+  const [selectedCity, setSelectedCity] = useState('');
+  const [selectedGender, setSelectedGender] = useState('');
 
+  const uniqueStates = [...new Set(registrations.map((reg) => reg.state))];
+  const filteredCities = registrations
+    .filter((reg) => selectedState ? reg.state === selectedState : true)
+    .map((reg) => reg.city);
+
+  const uniqueCities = [...new Set(filteredCities)];
   const handleImagePreview = (imageUrl: string) => {
     setSelectedImage(imageUrl);
   };
+
+  const filteredRegistrations = registrations.filter((reg) => {
+    const matchesState = selectedState ? reg.state === selectedState : true;
+    const matchesCity = selectedCity ? reg.city === selectedCity : true;
+    const matchesGender = selectedGender ? reg.gender === selectedGender : true;
+
+    return matchesState && matchesCity && matchesGender;
+  });
 
   const handleVideoPreview = (videoUrl: string) => {
     setSelectedVideo(videoUrl);
@@ -178,18 +195,26 @@ export default function AdminDashboard() {
               className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-indigo-500"
             >
               <option value="">All States</option>
-              <option value="State A">State A</option>
-              <option value="State B">State B</option>
+              {uniqueStates.map((state) => (
+                <option key={state} value={state}>
+                  {state}
+                </option>
+              ))}
             </select>
+
             <select
               value={cityFilter}
               onChange={(e) => setCityFilter(e.target.value)}
               className="px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring focus:border-indigo-500"
             >
               <option value="">All Cities</option>
-              <option value="City X">City X</option>
-              <option value="City Y">City Y</option>
+              {uniqueCities.map((city) => (
+                <option key={city} value={city}>
+                  {city}
+                </option>
+              ))}
             </select>
+
             <select
               value={genderFilter}
               onChange={(e) => setGenderFilter(e.target.value)}

@@ -108,7 +108,7 @@ const RegistrationForm = () => {
       .max(new Date(), 'Date of birth cannot be in the future'),
     gender: Yup.string()
       .required('Gender is required')
-      .oneOf(['male', 'female', 'other'], 'Invalid gender selection'),
+      .oneOf(['Male', 'Female', 'Other'], 'Invalid gender selection'),
     mobile: Yup.string()
       .required('Mobile number is required')
       .matches(/^[0-9]{10}$/, 'Mobile number must be exactly 10 digits'),
@@ -292,7 +292,7 @@ const RegistrationForm = () => {
                   <div>
                     <label className="block text-sm font-medium text-indigo-900 mb-2">Gender*</label>
                     <div className="flex space-x-6">
-                      {['male', 'female', 'other'].map((gender) => (
+                      {['Male', 'Female', 'Other'].map((gender) => (
                         <label key={gender} className="inline-flex items-center cursor-pointer">
                           <Field
                             type="radio"
