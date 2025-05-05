@@ -67,11 +67,9 @@ Follow these steps to set up and run the project locally:
     ```
 
 3.  **Set up Environment Variables:**
-    Create a `.env.local` file in the root directory by copying the example file:
-    ```bash
-    cp .env.example .env.local
-    ```
-    Update the `.env.local` file with your specific configuration:
+    Create a `.env` file in the root directory:
+
+    Update the `.env` file with your specific configuration:
     ```dotenv
     # PostgreSQL Database URL (Prisma)
     # Format: postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=public
