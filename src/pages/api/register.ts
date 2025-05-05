@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import formidable from 'formidable';
 import { cloudinary } from "@/lib/cloudinary";
 import fs from 'fs';
+import os from 'os';
 
 export const config = {
     api: {
@@ -19,7 +20,7 @@ function parseForm(req: NextApiRequest) {
     return new Promise<{ fields: formidable.Fields; files: formidable.Files }>((resolve, reject) => {
         const form = formidable({
             multiples: false,
-            uploadDir: './public/uploads',
+            uploadDir: os.tmpdir(),
             keepExtensions: true,
         });
 
